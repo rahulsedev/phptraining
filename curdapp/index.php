@@ -21,6 +21,7 @@
       <th scope="col">Name</th>
       <th scope="col">Email</th>
       <th scope="col">Status</th>
+      <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
@@ -32,6 +33,7 @@
           <td><?php echo $val['name']?></td>
           <td><?php echo $val['name']?></td>
           <td><?php echo $val['is_active'] == 1 ? 'Active' : 'Inactive'?></td>
+          <td><a href="manageuser.php?id=<?php echo $val['id']?>">Edit</a></td>
         </tr>
       <?php } ?>
     <?php } ?>

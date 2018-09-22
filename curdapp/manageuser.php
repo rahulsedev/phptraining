@@ -16,16 +16,16 @@
 <?php if (!empty($errorsString)) { echo '<strong>Errors:</strong> <br>' . $errorsString;} ?>
 <form action="" method="POST" novalidate>
     <div class="form-group">
-      <label for="name">Name:</label>
-      <input type="text" class="form-control" id="name" placeholder="Enter name" name="name">
+      <label for="name">Name*:</label>
+      <input type="text" class="form-control" id="name" placeholder="Enter name" name="name" value="<?php echo $name?>">
     </div>
     <div class="form-group">
-      <label for="email">Email:</label>
-      <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+      <label for="email">Email*:</label>
+      <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" value="<?php echo $email?>">
     </div>
     <div class="form-group">
-      <label for="pwd">Password:</label>
-      <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd">
+      <label for="pwd">Password*:</label>
+      <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd" value="<?php echo $pwd?>">
     </div>
     <button type="submit" class="btn btn-default">Submit</button>
   </form>
