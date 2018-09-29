@@ -14,7 +14,7 @@
 <?php require_once('manageuser-init.php');?>
 <div class="container">
 <?php if (!empty($errorsString)) { echo '<strong>Errors:</strong> <br>' . $errorsString;} ?>
-<form action="" method="POST" novalidate>
+<form action="" method="POST" enctype="multipart/form-data" novalidate>
     <div class="form-group">
       <label for="name">Name*:</label>
       <input type="text" class="form-control" id="name" placeholder="Enter name" name="name" value="<?php echo $name?>">
@@ -26,6 +26,10 @@
     <div class="form-group">
       <label for="pwd">Password*:</label>
       <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd" value="<?php echo $pwd?>">
+    </div>
+    <div class="form-group">
+      <label for="photo">Photo:</label>
+      <input type="file" class="form-control" id="photo" placeholder="Enter photo" name="photo">
     </div>
     <button type="submit" class="btn btn-default">Submit</button>
   </form>

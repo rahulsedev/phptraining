@@ -1,5 +1,7 @@
 <?php
-function pr($dt) { echo'<pre>';print_r ($dt);}
+if (empty($_SESSION['User']) || !isset($_SESSION['User'])) {
+    header('Location: login.php');  
+}
 $dbConObj = new mysqli(DATABASE_CONFIG['HOST'], DATABASE_CONFIG['USR'], DATABASE_CONFIG['PASS'], DATABASE_CONFIG['DB_NAME']);
 if (!empty($dbConObj->connect_error)) {
     echo "Connection error: " . $dbConObj->connect_error;
@@ -7,7 +9,8 @@ if (!empty($dbConObj->connect_error)) {
 }
 //Start - create operation code
 $errorsString = '';
-$name = $email = $pwd = '';
+$name = $email = $pwd = $fileName = '';
+$datetime = date('Y-m-d H:i:s');
 $create = true;
 // handle edit case, detect user id from url
 if (!empty($_GET['id'])) {
@@ -21,10 +24,11 @@ if (!empty($_GET['id'])) {
     $userDtls = $dbConObj->query($sqlGetUser)->fetch_assoc();
     $name = $userDtls['name'];
     $email = $userDtls['email'];
+    $newFileName = $userDtls['photo'];
     $create = false;
 }
 
-if (!empty($_POST)) {
+if (!empty($_POST)) {    
     $name = $_POST['name'];
     $email = $_POST['email'];
     $pwd = $_POST['pwd'];
@@ -43,14 +47,25 @@ if (!empty($_POST)) {
     if (!empty($errors)) {
         $errorsString = implode("<br>", $errors);
     } else {
-        $datetime = date('Y-m-d H:i:s');
+        if (!empty($_FILES['photo']['name']) && !empty($_FILES['photo']['tmp_name'])) {
+            if ($_FILES['photo']['error'] == 0) {
+                $uploads_dir = 'photo';
+                $source = $_FILES['photo']['tmp_name'];
+                $fileName = $_FILES['photo']['name'];
+                $fileAr = explode(".", $fileName);
+                $fileExt = end($fileAr);
+                unset($fileAr[count($fileAr) - 1]);
+                $newFileName = $fileAr[0] . '-' . date('YmdHis') . '.' . $fileExt;
+                $status = move_uploaded_file($source, "$uploads_dir/$newFileName");
+            }
+        }
         
         if ($create === true) {
             $sql = "INSERT INTO `users` 
-            (`name`, `email`, `pwd`, `is_active`, `created`) VALUES
-            ('$name', '$email', '$pwd', 1, '$datetime')";
+            (`name`, `email`, `pwd`, `photo`, `is_active`, `created`) VALUES
+            ('$name', '$email', '$pwd', '$newFileName', 1, '$datetime')";
         } else {
-            $sql = "UPDATE users set name='$name', email='$email' where id='$userId'";
+            $sql = "UPDATE users set name='$name', email='$email', photo='$newFileName' where id='$userId'";
         }
 
         $isUserAdded = $dbConObj->query($sql);
